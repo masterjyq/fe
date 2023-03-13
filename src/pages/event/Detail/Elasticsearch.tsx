@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-export const severityMap = ['一级告警', '二级告警', '三级告警'];
+export const severityMap = ['紧急', '重要', '次要', '提示'];
 
 export default function ElasticsearchDetail() {
   return [

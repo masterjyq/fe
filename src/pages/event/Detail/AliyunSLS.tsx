@@ -2,9 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 
 const severityMap = {
-  1: '一级告警',
-  2: '二级告警',
-  3: '三级告警',
+  1: '紧急',
+  2: '重要',
+  3: '次要',
+  4: '提示',
 };
 
 export default function AliyunSLSDetail() {

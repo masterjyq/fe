@@ -30,7 +30,7 @@ import './locale';
 import './index.less';
 
 const { confirm } = Modal;
-export const SeverityColor = ['red', 'orange', 'yellow', 'green'];
+export const SeverityColor = ['red', 'orange', 'yellow', 'blue', 'green'];
 export function deleteAlertEventsModal(ids: number[], onSuccess = () => {}, t) {
   confirm({
     title: t('delete_confirm.title'),
@@ -151,6 +151,7 @@ const Event: React.FC = () => {
             <Select.Option value={1}>{t('common:severity.1')}</Select.Option>
             <Select.Option value={2}>{t('common:severity.2')}</Select.Option>
             <Select.Option value={3}>{t('common:severity.3')}</Select.Option>
+            <Select.Option value={4}>{t('common:severity.4')}</Select.Option>
           </Select>
           <Select
             allowClear

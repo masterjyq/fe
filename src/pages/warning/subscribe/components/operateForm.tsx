@@ -256,6 +256,9 @@ const OperateForm: React.FC<Props> = ({ detail = {}, type }) => {
                 <Radio key={3} value={3}>
                   {t('common:severity.3')}
                 </Radio>
+                  <Radio key={4} value={4}>
+                  {t('common:severity.4')}
+                </Radio>
               </Radio.Group>
             </Form.Item>
 

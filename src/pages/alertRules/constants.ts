@@ -1,4 +1,4 @@
-export const priorityColor = ['red', 'orange', 'blue'];
+export const priorityColor = ['red', 'orange','yellow','blue'];
 export const pageSizeOptionsDefault = ['30', '50', '100', '300'];
 export const panelBaseProps: any = {
   size: 'small',

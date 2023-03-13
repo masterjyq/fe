@@ -21,7 +21,7 @@ export const PAGE_SIZE_OPTION_LARGE = 150;
 
 export const randomColor = ['pink', 'red', 'yellow', 'orange', 'cyan', 'green', 'blue', 'purple', 'geekblue', 'magenta', 'volcano', 'gold', 'lime'];
 
-export const priorityColor = ['red', 'orange', 'blue'];
+export const priorityColor = ['red', 'orange','yellow','blue'];;
 // 主题色
 export const chartColor = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
 export const METRICS = {

@@ -4,7 +4,7 @@ import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import Rule from './Rule';
 import { ops, functions } from './configs';
 
-export const severityMap = ['一级告警', '二级告警', '三级告警'];
+export const severityMap = ['紧急', '重要', '次要', '提示'];
 
 export default function index({ form }) {
   return (
@@ -51,9 +51,10 @@ export default function index({ form }) {
                               <span className='ant-input-group-addon'>触发</span>
                               <Form.Item name={[name, 'severity']} noStyle>
                                 <Select style={{ width: '100%' }}>
-                                  <Select.Option value={1}>一级告警</Select.Option>
-                                  <Select.Option value={2}>二级告警</Select.Option>
-                                  <Select.Option value={3}>三级告警</Select.Option>
+                                  <Select.Option value={1}>紧急</Select.Option>
+                                  <Select.Option value={2}>重要</Select.Option>
+                                  <Select.Option value={3}>次要</Select.Option>
+                                  <Select.Option value={4}>提示</Select.Option>
                                 </Select>
                               </Form.Item>
                             </Input.Group>

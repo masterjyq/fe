@@ -30,8 +30,10 @@ import { hoursOptions } from '@/pages/event/constants';
 import { CommonStateContext } from '@/App';
 import exportEvents, { downloadFile } from './exportEvents';
 import { getEvents } from './services';
+import { SeverityColor } from '../event';
 import '../event/index.less';
 import './locale';
+import { priorityColor } from '@/utils/constant';
 
 const Event: React.FC = () => {
   const { t } = useTranslation('AlertHisEvents');
@@ -69,7 +71,7 @@ const Event: React.FC = () => {
     {
       title: t('rule_name'),
       dataIndex: 'rule_name',
-      render(title, { id, tags }) {
+        render(title, { id, tags, severity }) {
         const content =
           tags &&
           tags.map((item) => (
@@ -85,7 +87,7 @@ const Event: React.FC = () => {
                 }
               }}
             >
-              {item}
+                {item}
             </Tag>
           ));
         return (
@@ -97,7 +99,7 @@ const Event: React.FC = () => {
                 }}
                 target='_blank'
               >
-                {title}
+                 <Tag color={priorityColor[ severity - 1]}>{title}</Tag>
               </Link>
             </div>
             <div>

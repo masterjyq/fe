@@ -367,6 +367,7 @@ const editModal: React.FC<Props> = ({ isModalVisible, editModalFinish }) => {
                         <Radio value={1}>{t('common:severity.1')}</Radio>
                         <Radio value={2}>{t('common:severity.2')}</Radio>
                         <Radio value={3}>{t('common:severity.3')}</Radio>
+                        <Radio value={4}>{t('common:severity.3')}</Radio>
                       </Radio.Group>
                     </Form.Item>
                   </>

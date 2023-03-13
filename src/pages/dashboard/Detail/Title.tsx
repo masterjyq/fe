@@ -103,6 +103,9 @@ export default function Title(props: IProps) {
                     refresh();
                   }}
                 >
+                    <Select.Option key={-1} value={-1}>
+                        所有集群
+                    </Select.Option>
                   {_.map(datasources, (item) => {
                     return (
                       <Select.Option key={item.id} value={item.id}>

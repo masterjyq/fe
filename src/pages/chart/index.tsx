@@ -95,6 +95,9 @@ export default function Chart() {
                       setCurCluster(val);
                     }}
                   >
+                      <Select.Option key={-1} value={-1}>
+                          所有集群
+                      </Select.Option>
                     {clusters.map((cluster) => (
                       <Select.Option key={cluster.id} value={cluster.id}>
                         {cluster.name}

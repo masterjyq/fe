@@ -89,7 +89,8 @@ function FormCpt(props, ref) {
             <Form.Item shouldUpdate={(prevValues, curValues) => prevValues.type !== curValues.type} noStyle>
               {({ getFieldValue }) => {
                 const type = getFieldValue('type');
-                if (type !== 'text') {
+                // 超链接也不需要
+                if (type !== 'text' && type !== 'link') {
                   return (
                     <div style={{ height: 'calc(100% - 310px)', overflowY: 'auto' }}>
                       <div style={{ marginBottom: 10 }}>

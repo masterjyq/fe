@@ -50,6 +50,10 @@ export const visualizations = [
     type: 'gauge',
     name: '仪表盘',
   },
+  {
+      type: 'link',
+      name: '链接',
+  },
 ];
 
 export const IRefreshMap = {

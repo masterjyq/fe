@@ -310,3 +310,16 @@ export function convertDashboardGrafanaToN9E(data) {
   };
   return dashboard;
 }
+
+export function renderUrl(url,metric){
+    var endUrl = url
+    if (endUrl){
+        for(let key in metric){
+            const keyExpression = `{{${key}}}`
+            while (endUrl.includes(keyExpression)) {
+                endUrl = endUrl.replace(keyExpression, metric[key]);
+            }
+        }
+    }
+    return endUrl
+}

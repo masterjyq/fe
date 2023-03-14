@@ -30,6 +30,7 @@ interface ListItem extends DataType {
 type DataType = {
   name: string;
   value: number;
+  metric: number;
 };
 interface Props {
   data: DataType[];

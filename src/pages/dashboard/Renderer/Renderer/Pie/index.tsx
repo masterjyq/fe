@@ -43,13 +43,15 @@ export default function Pie(props: IProps) {
   );
 
   const sortedValues = calculatedValues.sort((a, b) => b.value - a.value);
+  debugger;
   const data =
-    max && sortedValues.length > max
+      max && sortedValues.length > max
       ? sortedValues
           .slice(0, max)
-      .map((i) => ({ name: i.name, value: i.stat, metric: i.metric }))
-          .concat({ name: '其他', value: sortedValues.slice(max).reduce((previousValue, currentValue) => currentValue.stat + previousValue, 0) })
-      : sortedValues.map((i) => ({ name: i.name, value: i.stat, metric: i.metric  }));
+          .map((i) => ({ name: i.name, value: i.stat, metric: i.metric }))
+          .concat({ name: '其他', value: sortedValues.slice(max).reduce((previousValue, currentValue) => currentValue.stat + previousValue, 0),metric:{} })
+      : sortedValues.map((i) => ({ name: i.name, value: i.stat, metric: i.metric }));
+
   return (
     <div className='renderer-pie-container'>
       <G2PieChart

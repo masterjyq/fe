@@ -40,7 +40,7 @@ export interface ITarget {
   legend?: string;
 }
 
-export type IType = 'row' | 'timeseries' | 'stat' | 'table' | 'pie' | 'hexbin' | 'barGauge' | 'text';
+export type IType = 'row' | 'timeseries' | 'stat' | 'table' | 'pie' | 'hexbin' | 'barGauge' | 'text' | 'link';
 
 export interface IValueMapping {
   match: {

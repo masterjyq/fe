@@ -10,7 +10,7 @@ interface IProps {
     series: any[];
     themeMode?: 'dark';
     time: IRawTimeRange;
-    cluster: string;
+    cluster?: number;
 }
 
 export default function index(props: IProps) {
@@ -22,7 +22,7 @@ export default function index(props: IProps) {
     const startms = start * 1000;
     const end = moment(parsedRange.end).unix();
     const endms = end * 1000;
-    const param = { "cluster":cluster === 'all' ? '':cluster, start, startms, end, endms }
+    const param = { "cluster":cluster === -1 ? '':cluster, start, startms, end, endms }
     dashboardMeta.variableConfigWithOptions?.forEach((val,_) =>{
         param[val.name] = val.value
     })

@@ -107,8 +107,7 @@ const en_US = {
         avg: 'Avg',
         sum: 'Sum',
         last: 'Last',
-        open: 'Open',
-        close: 'Close',
+        columns: 'Columns',
       },
       thresholds: {
         title: 'Thresholds',

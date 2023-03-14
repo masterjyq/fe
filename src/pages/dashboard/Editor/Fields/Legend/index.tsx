@@ -15,15 +15,16 @@
  *
  */
 import React from 'react';
-import { Form, Radio, Row, Col, Input } from 'antd';
+import { Form, Radio, Row, Col, Input, Select } from 'antd';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Panel } from '../../Components/Collapse';
+import { CaretDownOutlined } from '@ant-design/icons';
 
 export default function index() {
   const { t } = useTranslation('dashboard');
   const namePrefix = ['options', 'legend'];
-
+  const tableColum = ['max', 'min', 'avg', 'sum', 'last']
   return (
     <Panel header='Legend'>
       <Row>
@@ -36,66 +37,35 @@ export default function index() {
             </Radio.Group>
           </Form.Item>
         </Col>
+        <Col span={12}>
           <Form.Item noStyle shouldUpdate={(prevValues, curValues) => _.get(prevValues, [...namePrefix, 'displayMode']) !== _.get(curValues, [...namePrefix, 'displayMode'])}>
-            {({ getFieldValue }) => {
+              {({ getFieldValue }) => {
               if (getFieldValue([...namePrefix, 'displayMode']) === 'list') {
                 return (
-                    <Col span={12}>
                         <Form.Item label={t('panel.options.legend.placement')} name={[...namePrefix, 'placement']}>
                             <Radio.Group buttonStyle='solid'>
                                 <Radio.Button value='bottom'>Bottom</Radio.Button>
                                 <Radio.Button value='right'>Right</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
-                    </Col>
                 );
               } else if (getFieldValue([...namePrefix, 'displayMode']) === 'table') {
                   return (<>
-                  <Col span={6}>
-                      <Form.Item label={t('panel.options.legend.max')} name={[...namePrefix, 'max']} initialValue={true}>
-                          <Radio.Group buttonStyle='solid'>
-                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
-                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
-                          </Radio.Group>
-                      </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                      <Form.Item label={t('panel.options.legend.min')} name={[...namePrefix, 'min']} initialValue={true}>
-                          <Radio.Group buttonStyle='solid'>
-                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
-                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
-                          </Radio.Group>
-                      </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                      <Form.Item label={t('panel.options.legend.avg')} name={[...namePrefix, 'avg']} initialValue={true}>
-                          <Radio.Group buttonStyle='solid'>
-                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
-                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
-                          </Radio.Group>
-                      </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                      <Form.Item label={t('panel.options.legend.sum')} name={[...namePrefix, 'sum']} initialValue={false}>
-                          <Radio.Group buttonStyle='solid'>
-                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
-                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
-                          </Radio.Group>
-                      </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                      <Form.Item label={t('panel.options.legend.last')} name={[...namePrefix, 'last']} initialValue={true}>
-                          <Radio.Group buttonStyle='solid'>
-                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
-                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
-                          </Radio.Group>
-                      </Form.Item>
-                  </Col>
+                  <Form.Item label={t('panel.options.legend.columns')} name={[...namePrefix, 'columns']}>
+                      <Select mode='multiple' placeholder='' suffixIcon={<CaretDownOutlined />} >
+                          {_.map(tableColum,(item) => {
+                              return (<Select.Option key={item} value={item}>
+                                          {t(`panel.options.legend.${item}`)}
+                                      </Select.Option>);
+                          }) }
+                      </Select>
+                  </Form.Item>
                   </>);
               }
               return null;
             }}
           </Form.Item>
+          </Col>
           <Col span={24}>
               <Form.Item label={t('panel.custom.detailUrl')} name={[...namePrefix, 'detail']}>
                   <Input/>

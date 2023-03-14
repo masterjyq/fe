@@ -43,7 +43,6 @@ export default function Pie(props: IProps) {
   );
 
   const sortedValues = calculatedValues.sort((a, b) => b.value - a.value);
-  debugger;
   const data =
       max && sortedValues.length > max
       ? sortedValues

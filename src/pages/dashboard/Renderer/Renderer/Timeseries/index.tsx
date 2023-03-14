@@ -31,19 +31,12 @@ import { getLegendValues } from '../../utils/getCalculatedValuesBySeries';
 import './style.less';
 import { renderUrl } from '../../../utils'
 import { ColumnProps } from 'antd/lib/table';
-
-interface ColData {
-    value: number
-}
+import { useTranslation } from 'react-i18next';
 
 interface DataItem {
     id: string;
     name: string;
-    min: ColData;
-    max: ColData;
-    avg: ColData;
-    last: ColData;
-    sum: ColData;
+    columns: [];
     disabled: boolean;
     detail: string;
 }
@@ -77,6 +70,7 @@ function getStartAndEndByTargets(targets: any[]) {
 }
 
 export default function index(props: IProps) {
+  const { t } = useTranslation('dashboard');
   const { time, values, series, inDashboard = true, chartHeight = '200px', tableHeight = '200px', themeMode = '', onClick } = props;
   const { custom, options = {}, targets } = values;
   const { lineWidth = 1, gradientMode = 'none', scaleDistribution } = custom;
@@ -88,11 +82,7 @@ export default function index(props: IProps) {
   const legendEleSize = useSize(legendEleRef);
   const displayMode = options.legend?.displayMode || 'table';
   const placement = options.legend?.placement || 'bottom';
-  const max = options.legend?.max || false
-  const min = options.legend?.min || false
-  const avg = options.legend?.avg || false
-  const sum = options.legend?.sum || false
-  const last = options.legend?.last || false
+  const legendColumns = options.legend?.columns || ['max', 'min', 'avg', 'sum', 'last']
   const detail = options.legend?.detail || undefined
   const hasLegend = displayMode !== 'hidden';
   const [legendData, setLegendData] = useState<any[]>([]);
@@ -298,71 +288,18 @@ export default function index(props: IProps) {
                       );
               },
       }]
-    // 最大
-    if (max) {
+      legendColumns.forEach(column => {
         tableColum = [...tableColum,
                       {
-                          title: 'Max',
-                          dataIndex: 'max',
+                          title: t(`panel.options.legend.${column}`),
+                          dataIndex: column,
                           width: 100,
                           sorter: (a, b) => a.max.value - b.max.value,
                           render: (text) => {
                               return text.text;
                               },
                       }]
-    }
-    // 最小
-    if(min){
-        tableColum = [...tableColum,
-                      {
-                          title: 'Min',
-                          dataIndex: 'min',
-                          width: 100,
-                          sorter: (a, b) => a.min.value - b.min.value,
-                          render: (text) => {
-                              return text.text;
-                              },
-                      }]
-    }
-    // 平均
-    if (avg) {
-        tableColum = [...tableColum,
-                      {
-                          title: 'Avg',
-                          dataIndex: 'avg',
-                          width: 100,
-                          sorter: (a, b) => a.avg.value - b.avg.value,
-                          render: (text) => {
-                              return text.text;
-                              },
-                      }]
-    }
-    // 汇总
-    if (sum) {
-        tableColum = [...tableColum,
-                      {
-                          title: 'Sum',
-                          dataIndex: 'sum',
-                          width: 100,
-                          sorter: (a, b) => a.sum.value - b.sum.value,
-                          render: (text) => {
-                              return text.text;
-                              },
-                      },]
-    }
-    // 当前
-    if (last) {
-        tableColum = [...tableColum,
-                      {
-                          title: 'Last',
-                          dataIndex: 'last',
-                          width: 100,
-                          sorter: (a, b) => a.last.value - b.last.value,
-                          render: (text) => {
-                              return text.text;
-                              },
-                      }]
-    }
+     })
     // 是否添加详情
     if (detail) {
         tableColum = [...tableColum,

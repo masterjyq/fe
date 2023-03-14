@@ -15,7 +15,7 @@
  *
  */
 import React from 'react';
-import { Form, Radio, Row, Col } from 'antd';
+import { Form, Radio, Row, Col, Input } from 'antd';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Panel } from '../../Components/Collapse';
@@ -96,6 +96,11 @@ export default function index() {
               return null;
             }}
           </Form.Item>
+          <Col span={24}>
+              <Form.Item label={t('panel.custom.detailUrl')} name={[...namePrefix, 'detail']}>
+                  <Input/>
+              </Form.Item>
+          </Col>
       </Row>
     </Panel>
   );

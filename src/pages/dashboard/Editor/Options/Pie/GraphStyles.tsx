@@ -15,7 +15,7 @@
  *
  */
 import React from 'react';
-import { Form, Select, Row, Col, InputNumber, Switch } from 'antd';
+import { Form, Select, Row, Col, InputNumber, Switch, Input } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -56,21 +56,36 @@ export default function GraphStyles() {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={9}>
+          <Col span={12}>
             <Form.Item label={t('panel.custom.pie.max')} name={[...namePrefix, 'max']} tooltip={t('panel.custom.pie.max_tip')}>
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
           </Col>
+            <Col span={12}>
+                <Form.Item label={t('panel.custom.pie.valuePrecision')} name={[...namePrefix, 'valuePrecision']}>
+                    <InputNumber style={{ width: '100%' }} defaultValue={3} />
+                </Form.Item>
+            </Col>
+            <Col span={24}>
+                <Form.Item label={t('panel.custom.detailUrl')} name={[...namePrefix, 'detailUrl']} tooltip='变量请使用{{__cluster}}'>
+                    <Input style={{ width: '100%' }} />
+                </Form.Item>
+            </Col>
           <Col span={3}>
             <Form.Item label={t('panel.custom.pie.donut')} name={[...namePrefix, 'donut']} valuePropName='checked'>
               <Switch />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={5}>
             <Form.Item label={t('panel.custom.pie.labelWithName')} name={[...namePrefix, 'labelWithName']} valuePropName='checked'>
               <Switch />
             </Form.Item>
           </Col>
+            <Col span={6}>
+                <Form.Item label='label是否展示百分比' name={[...namePrefix, 'labelPercent']} valuePropName='checked'>
+                    <Switch />
+                </Form.Item>
+            </Col>
         </Row>
       </>
     </Panel>

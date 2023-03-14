@@ -29,6 +29,24 @@ import { hexPalette } from '../../../config';
 import valueFormatter from '../../utils/valueFormatter';
 import { getLegendValues } from '../../utils/getCalculatedValuesBySeries';
 import './style.less';
+import { renderUrl } from '../../../utils'
+import { ColumnProps } from 'antd/lib/table';
+
+interface ColData {
+    value: number
+}
+
+interface DataItem {
+    id: string;
+    name: string;
+    min: ColData;
+    max: ColData;
+    avg: ColData;
+    last: ColData;
+    sum: ColData;
+    disabled: boolean;
+    detail: string;
+}
 
 interface IProps {
   time?: IRawTimeRange;
@@ -70,6 +88,12 @@ export default function index(props: IProps) {
   const legendEleSize = useSize(legendEleRef);
   const displayMode = options.legend?.displayMode || 'table';
   const placement = options.legend?.placement || 'bottom';
+  const max = options.legend?.max || false
+  const min = options.legend?.min || false
+  const avg = options.legend?.avg || false
+  const sum = options.legend?.sum || false
+  const last = options.legend?.last || false
+  const detail = options.legend?.detail || undefined
   const hasLegend = displayMode !== 'hidden';
   const [legendData, setLegendData] = useState<any[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -241,6 +265,117 @@ export default function index(props: IProps) {
     }
   }, [placement]);
 
+  let tableColum:ColumnProps<DataItem>[] = [
+      {
+          title: `Series (${series.length})`,
+          dataIndex: 'name',
+          ellipsis: {
+              showTitle: false,
+          },
+          render: (_text, record: any) => {
+              return (
+                      <Tooltip
+                          placement='topLeft'
+                          title={
+                            <div>
+                                <div>{_.get(record, 'metric.__name__')}</div>
+                                <div>{record.offset && record.offset !== 'current' ? `offfset ${record.offset}` : ''}</div>
+                                {_.map(_.omit(record.metric, '__name__'), (val, key) => {
+                                    return (
+                                            <div key={key}>
+                                                {key}={val}
+                                            </div>
+                                            );
+                                })}
+                            </div>
+                          }
+                          getTooltipContainer={() => document.body}
+                          >
+                          <span className='renderer-timeseries-legend-color-symbol' style={{ backgroundColor: record.color }} />
+                          {record.offset && record.offset !== 'current' ? <span style={{ paddingRight: 5 }}>offfset {record.offset}</span> : ''}
+                          <span>{_text}</span>
+                      </Tooltip>
+                      );
+              },
+      }]
+    // 最大
+    if (max) {
+        tableColum = [...tableColum,
+                      {
+                          title: 'Max',
+                          dataIndex: 'max',
+                          width: 100,
+                          sorter: (a, b) => a.max.value - b.max.value,
+                          render: (text) => {
+                              return text.text;
+                              },
+                      }]
+    }
+    // 最小
+    if(min){
+        tableColum = [...tableColum,
+                      {
+                          title: 'Min',
+                          dataIndex: 'min',
+                          width: 100,
+                          sorter: (a, b) => a.min.value - b.min.value,
+                          render: (text) => {
+                              return text.text;
+                              },
+                      }]
+    }
+    // 平均
+    if (avg) {
+        tableColum = [...tableColum,
+                      {
+                          title: 'Avg',
+                          dataIndex: 'avg',
+                          width: 100,
+                          sorter: (a, b) => a.avg.value - b.avg.value,
+                          render: (text) => {
+                              return text.text;
+                              },
+                      }]
+    }
+    // 汇总
+    if (sum) {
+        tableColum = [...tableColum,
+                      {
+                          title: 'Sum',
+                          dataIndex: 'sum',
+                          width: 100,
+                          sorter: (a, b) => a.sum.value - b.sum.value,
+                          render: (text) => {
+                              return text.text;
+                              },
+                      },]
+    }
+    // 当前
+    if (last) {
+        tableColum = [...tableColum,
+                      {
+                          title: 'Last',
+                          dataIndex: 'last',
+                          width: 100,
+                          sorter: (a, b) => a.last.value - b.last.value,
+                          render: (text) => {
+                              return text.text;
+                              },
+                      }]
+    }
+    // 是否添加详情
+    if (detail) {
+        tableColum = [...tableColum,
+                      {
+                          title: '详情',
+                          dataIndex: 'detail',
+                          width: 60,
+                          render: (_text, record: any) => {
+                              const detailUrl = renderUrl(detail, record.metric)
+                              return (<a href={ detailUrl } target='_blank'>详情</a>);
+                              },
+                      }]
+    }
   return (
     <div
       className='renderer-timeseries-container'
@@ -267,85 +402,7 @@ export default function index(props: IProps) {
                 size='small'
                 className='scroll-container-table'
                 scroll={{ x: 650 }}
-                columns={[
-                  {
-                    title: `Series (${series.length})`,
-                    dataIndex: 'name',
-                    ellipsis: {
-                      showTitle: false,
-                    },
-                    render: (_text, record: any) => {
-                      return (
-                        <Tooltip
-                          placement='topLeft'
-                          title={
-                            <div>
-                              <div>{_.get(record, 'metric.__name__')}</div>
-                              <div>{record.offset && record.offset !== 'current' ? `offfset ${record.offset}` : ''}</div>
-                              {_.map(_.omit(record.metric, '__name__'), (val, key) => {
-                                return (
-                                  <div key={key}>
-                                    {key}={val}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          }
-                          getTooltipContainer={() => document.body}
-                        >
-                          <span className='renderer-timeseries-legend-color-symbol' style={{ backgroundColor: record.color }} />
-                          {record.offset && record.offset !== 'current' ? <span style={{ paddingRight: 5 }}>offfset {record.offset}</span> : ''}
-                          <span>{_text}</span>
-                        </Tooltip>
-                      );
-                    },
-                  },
-                  {
-                    title: 'Max',
-                    dataIndex: 'max',
-                    width: 100,
-                    sorter: (a, b) => a.max.value - b.max.value,
-                    render: (text) => {
-                      return text.text;
-                    },
-                  },
-                  {
-                    title: 'Min',
-                    dataIndex: 'min',
-                    width: 100,
-                    sorter: (a, b) => a.min.value - b.min.value,
-                    render: (text) => {
-                      return text.text;
-                    },
-                  },
-                  {
-                    title: 'Avg',
-                    dataIndex: 'avg',
-                    width: 100,
-                    sorter: (a, b) => a.avg.value - b.avg.value,
-                    render: (text) => {
-                      return text.text;
-                    },
-                  },
-                  {
-                    title: 'Sum',
-                    dataIndex: 'sum',
-                    width: 100,
-                    sorter: (a, b) => a.sum.value - b.sum.value,
-                    render: (text) => {
-                      return text.text;
-                    },
-                  },
-                  {
-                    title: 'Last',
-                    dataIndex: 'last',
-                    width: 100,
-                    sorter: (a, b) => a.last.value - b.last.value,
-                    render: (text) => {
-                      return text.text;
-                    },
-                  },
-                ]}
+                columns={tableColum}
                 dataSource={legendData}
                 locale={{
                   emptyText: '暂无数据',

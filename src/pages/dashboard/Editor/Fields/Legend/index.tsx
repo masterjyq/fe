@@ -36,23 +36,66 @@ export default function index() {
             </Radio.Group>
           </Form.Item>
         </Col>
-        <Col span={12}>
           <Form.Item noStyle shouldUpdate={(prevValues, curValues) => _.get(prevValues, [...namePrefix, 'displayMode']) !== _.get(curValues, [...namePrefix, 'displayMode'])}>
             {({ getFieldValue }) => {
               if (getFieldValue([...namePrefix, 'displayMode']) === 'list') {
                 return (
-                  <Form.Item label={t('panel.options.legend.placement')} name={[...namePrefix, 'placement']}>
-                    <Radio.Group buttonStyle='solid'>
-                      <Radio.Button value='bottom'>Bottom</Radio.Button>
-                      <Radio.Button value='right'>Right</Radio.Button>
-                    </Radio.Group>
-                  </Form.Item>
+                    <Col span={12}>
+                        <Form.Item label={t('panel.options.legend.placement')} name={[...namePrefix, 'placement']}>
+                            <Radio.Group buttonStyle='solid'>
+                                <Radio.Button value='bottom'>Bottom</Radio.Button>
+                                <Radio.Button value='right'>Right</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
                 );
+              } else if (getFieldValue([...namePrefix, 'displayMode']) === 'table') {
+                  return (<>
+                  <Col span={6}>
+                      <Form.Item label={t('panel.options.legend.max')} name={[...namePrefix, 'max']} initialValue={true}>
+                          <Radio.Group buttonStyle='solid'>
+                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
+                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
+                          </Radio.Group>
+                      </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                      <Form.Item label={t('panel.options.legend.min')} name={[...namePrefix, 'min']} initialValue={true}>
+                          <Radio.Group buttonStyle='solid'>
+                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
+                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
+                          </Radio.Group>
+                      </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                      <Form.Item label={t('panel.options.legend.avg')} name={[...namePrefix, 'avg']} initialValue={true}>
+                          <Radio.Group buttonStyle='solid'>
+                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
+                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
+                          </Radio.Group>
+                      </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                      <Form.Item label={t('panel.options.legend.sum')} name={[...namePrefix, 'sum']} initialValue={false}>
+                          <Radio.Group buttonStyle='solid'>
+                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
+                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
+                          </Radio.Group>
+                      </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                      <Form.Item label={t('panel.options.legend.last')} name={[...namePrefix, 'last']} initialValue={true}>
+                          <Radio.Group buttonStyle='solid'>
+                              <Radio.Button value={true}>{t('panel.options.legend.open')}</Radio.Button>
+                              <Radio.Button value={false}>{t('panel.options.legend.close')}</Radio.Button>
+                          </Radio.Group>
+                      </Form.Item>
+                  </Col>
+                  </>);
               }
               return null;
             }}
           </Form.Item>
-        </Col>
       </Row>
     </Panel>
   );

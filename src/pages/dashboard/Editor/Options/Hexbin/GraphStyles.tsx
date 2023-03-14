@@ -15,7 +15,7 @@
  *
  */
 import React from 'react';
-import { Form, Radio, Select, Row, Col, InputNumber, Switch } from 'antd';
+import { Form, Radio, Select, Row, Col, InputNumber, Switch, Input } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -113,6 +113,13 @@ export default function GraphStyles() {
               }
             }}
           </Form.Item>
+        </Row>
+        <Row gutter={10}>
+            <Col span={24}>
+                <Form.Item label={t('panel.custom.detailUrl')} name={[...namePrefix, 'detailUrl']} tooltip='变量请使用{{__cluster}}'>
+                    <Input style={{ width: '100%' }} />
+                </Form.Item>
+            </Col>
         </Row>
       </>
     </Panel>

@@ -102,6 +102,13 @@ const en_US = {
           hidden: 'Hidden',
         },
         placement: 'Placement',
+        max: 'Max',
+        min: 'Min',
+        avg: 'Avg',
+        sum: 'Sum',
+        last: 'Last',
+        open: 'Open',
+        close: 'Close',
       },
       thresholds: {
         title: 'Thresholds',
@@ -163,6 +170,7 @@ const en_US = {
       },
       colorRange: 'Color', // hexbin
       reverseColorOrder: 'Reverse color order', // hexbin
+      detailUrl: 'detail url', // hexbin
       colorDomainAuto: 'Color domain auto', // hexbin
       colorDomainAuto_tip: 'By default, the min max value is automatically taken from the series', // hexbin
       pie: {
@@ -171,6 +179,8 @@ const en_US = {
         max_tip: 'Exceeded blocks are merged and displayed as other',
         donut: 'Donut',
         labelWithName: 'Label with name',
+        valuePrecision: 'Value Precision',
+        labelPercent: 'Label Percent',
       },
       table: {
         displayMode: 'Display mode',

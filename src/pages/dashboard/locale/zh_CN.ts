@@ -102,6 +102,13 @@ const zh_CN = {
           hidden: '隐藏',
         },
         placement: '位置',
+        max: '最大（Max）',
+        min: '最小（Min）',
+        avg: '平均（Avg）',
+        sum: '汇总（Sum）',
+        last: '当前（Last）',
+        open: '开启',
+        close: '关闭',
       },
       thresholds: {
         title: '阈值',
@@ -169,6 +176,7 @@ const zh_CN = {
       },
       colorRange: '颜色', // hexbin
       reverseColorOrder: '反转颜色', // hexbin
+      detailUrl: '详情URL', // hexbin
       colorDomainAuto: '自动 min/max 值', // hexbin
       colorDomainAuto_tip: '默认自动从 series 里面取 min max 值', // hexbin
       pie: {
@@ -177,6 +185,8 @@ const zh_CN = {
         max_tip: '超过的块数则合并展示为其他',
         donut: '环图模式',
         labelWithName: 'label是否包含名称',
+        valuePrecision: '小数位数',
+        labelPercent: 'label是否展示百分比',
       },
       table: {
         displayMode: '显示模式',

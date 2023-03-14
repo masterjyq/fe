@@ -312,7 +312,7 @@ export function convertDashboardGrafanaToN9E(data) {
 }
 
 export function renderUrl(url,metric){
-    var endUrl = url
+    let endUrl = url
     if (endUrl){
         for(let key in metric){
             const keyExpression = `{{${key}}}`

@@ -82,6 +82,13 @@ export interface IOptions {
     calcs: string[];
     displayMode: 'list' | 'table' | 'hidden';
     placement: 'right' | 'bottom';
+    disabled: boolean;
+    min: boolean;
+    max: boolean;
+    avg: boolean;
+    last: boolean;
+    sum: boolean;
+    detail: string;
   };
   tooltip?: {
     mode: 'single' | 'all';
@@ -147,6 +154,7 @@ export interface IHexbinStyles {
   colorDomainAuto: boolean;
   colorDomain: number[]; // 自定义 [min, max]
   reverseColorOrder: boolean;
+  detailUrl: undefined;
 }
 
 export interface IPieStyles {

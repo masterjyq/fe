@@ -36,6 +36,9 @@ interface Props {
   positon: 'top' | 'left' | 'right' | 'bottom';
   hidden: boolean;
   labelWithName: boolean;
+  labelPercent: boolean;
+  valuePrecision: undefined;
+  detailUrl: undefined;
   themeMode?: 'dark';
   donut?: boolean;
 }
@@ -57,7 +60,7 @@ function renderStatistic(containerWidth, text, style) {
 }
 
 const DemoPie = (props: Props) => {
-  const { data, positon, hidden, labelWithName, themeMode, donut } = props;
+  const { data, positon, hidden, labelWithName, labelPercent, valuePrecision, detailUrl, themeMode, donut } = props;
 
   const config: PieConfig = {
     padding: [16, 8, 16, 8],
@@ -70,7 +73,7 @@ const DemoPie = (props: Props) => {
     label: {
       type: 'spider',
       content: (record) => {
-        return `${labelWithName ? `${record.name}: ` : ''}${(record.percent * 100).toFixed(0)}%`;
+          return `${labelWithName ? `${record.name}: ` : ''}${labelPercent ?`${(record.percent * 100).toFixed(0)}%`:`${record.value.toFixed(valuePrecision)}`}`;
       },
       style: {
         fontSize: 12,
@@ -80,7 +83,7 @@ const DemoPie = (props: Props) => {
     },
     statistic: {
       title: {
-        offsetY: 16,
+        offsetY: -10,
         style: {
           color: themeMode === 'dark' ? '#ABADBA' : 'unset',
         },
@@ -94,14 +97,14 @@ const DemoPie = (props: Props) => {
         },
       },
       content: {
-        offsetY: -16,
+        offsetY: -4,
         style: {
           color: themeMode === 'dark' ? '#fff' : 'unset',
         },
         customHtml: (container, _view, datum, data) => {
           const { width } = container.getBoundingClientRect();
           let text = datum ? `${datum.value}` : `${data?.reduce((r, d) => r + d.value, 0)}`;
-          text = _.toNumber(text).toFixed(3);
+          text = _.toNumber(text).toFixed(valuePrecision);
           return renderStatistic(width, text, {
             fontSize: 36,
           });
@@ -117,10 +120,40 @@ const DemoPie = (props: Props) => {
       },
     ],
     tooltip: {
-      fields: ['name', 'value'],
-      formatter: (datum) => {
-        return { name: datum.name, value: `${datum.value.toFixed(3)}` };
-      },
+        position: "top",
+        offset: 2,
+        enterable: true,
+        customContent: (title, items): string => {
+            let liString = "";
+            items?.map((item, index) =>{
+                const { name, color, data } = item;
+                const { metric } = data;
+                const value = _.toNumber(item.value).toFixed(valuePrecision)
+                let endUrl = detailUrl ? detailUrl : ""
+                let detailDom = ""
+                if (endUrl !== ""){
+                    for(let key in metric){
+                        const keyExpression = `{{${key}}}`
+                        while (endUrl?.includes(keyExpression)) {
+                            endUrl = endUrl?.replace(keyExpression, metric[key]);
+                        }
+                    }
+                    detailDom = `<span><a href=${endUrl} target="_blank">&nbsp;|&nbsp;详情</a></span>`
+                }
+                liString = liString + `<li key=${name}
+                                        class="g2-tooltip-list-item"
+                                        data-index=${index}
+                                        style="margin-bottom: 4; display: 'flex'; align-items: 'center'">
+                                        <span class="g2-tooltip-marker" style="background-color: ${color}"></span>
+                                        <span style="display: 'inline-flex'; flex: 1; justify-content: 'space-between' ">
+                                        <span style="margin-right: 16">${name}:</span>
+                                        <span class="g2-tooltip-list-item-value">${value}</span>
+                                        ${detailDom}
+                                        </span>
+                                        </li>`
+            })
+            return `<ul style="padding-left: 0">${liString}</ul>`
+        },
     },
     legend: hidden
       ? false

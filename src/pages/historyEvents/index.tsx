@@ -264,6 +264,9 @@ const Event: React.FC = () => {
             size='small'
             columns={columns}
             {...tableProps}
+            rowClassName={(record: { severity: number; is_recovered: number }) => {
+              return SeverityColor[record.is_recovered ? 3 : record.severity - 1] + '-left-border';
+            }}
             pagination={{
               ...tableProps.pagination,
               pageSize: 30,

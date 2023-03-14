@@ -17,19 +17,43 @@
 /**
  * 详情页面只是用于内置规则的展示
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import _ from 'lodash';
 import PageLayout from '@/components/pageLayout';
-import Form from './Form';
+import Form from '@/pages/alertRules/Form';
+import { getRuleCates } from './services';
 
 export default function Edit() {
   const { t } = useTranslation('alertRules');
-  const { state } = useLocation<any>();
+  const { search } = useLocation<any>();
+  const query = queryString.parse(search);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [initialValues, setInitialValues] = useState<any>(null);
+
+  useEffect(() => {
+    getRuleCates()
+      .then((res) => {
+        const cateObj = _.find(res, (item) => item.name === query.cate);
+        if (cateObj) {
+          const ruleObj = _.find(cateObj.alert_rules, (item) => item.name === query.name);
+          if (ruleObj) {
+            setInitialValues(ruleObj);
+          }
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return null;
 
   return (
     <PageLayout title={t('title')} showBack backPath='/alert-rules-built-in'>
-      <Form type={3} initialValues={state} />
+      {initialValues ? <Form type={3} initialValues={initialValues} /> : <div>{t('alertRulesBuiltin:detail_no_result')}</div>}
     </PageLayout>
   );
 }

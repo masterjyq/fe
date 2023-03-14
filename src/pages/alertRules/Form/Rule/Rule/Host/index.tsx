@@ -17,7 +17,7 @@
 
 import React from 'react';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Form, InputNumber, Space, Select, Card, Radio } from 'antd';
+import { Form, InputNumber, Space, Select, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Severity from '@/pages/alertRules/Form/components/Severity';
 import Inhibit from '@/pages/alertRules/Form/components/Inhibit';
@@ -26,7 +26,7 @@ import ValuesSelect from './ValuesSelect';
 import Preview from './Preview';
 import './style.less';
 
-const queryKeyOptions = [{ value: 'all_hosts' }, { value: 'datasource_ids' }, { value: 'group_ids' }, { value: 'tags' }, { value: 'hosts' }];
+const queryKeyOptions = [{ value: 'all_hosts' }, { value: 'group_ids' }, { value: 'tags' }, { value: 'hosts' }];
 const triggerTypeOptions = [{ value: 'target_miss' }, { value: 'pct_target_miss' }, { value: 'offset' }];
 
 export default function index() {
@@ -45,7 +45,7 @@ export default function index() {
                   <PlusCircleOutlined
                     onClick={() =>
                       add({
-                        key: 'datasource_ids',
+                        key: 'group_ids',
                         op: '==',
                         values: [],
                       })
@@ -111,7 +111,7 @@ export default function index() {
                       add({
                         type: 'target_miss',
                         severity: 3,
-                        duration: 1,
+                        duration: 30,
                       })
                     }
                   />
@@ -130,10 +130,12 @@ export default function index() {
                           onChange={(val) => {
                             const triggers = form.getFieldValue(['rule_config', 'triggers']);
                             const trigger = triggers[field.name];
-                            if (val === 'offset') {
+                            if (val === 'target_miss') {
                               trigger.duration = 30;
+                            } else if (val === 'offset') {
+                              trigger.duration = 500;
                             } else {
-                              trigger.duration = 1;
+                              trigger.duration = 30;
                             }
                             console.log(triggers);
                             form.setFieldsValue({
@@ -160,7 +162,7 @@ export default function index() {
                           return (
                             <Space align='baseline'>
                               <span>
-                                {type === 'pct_target_miss' ? t('host.trigger.pct_target_miss_text') : type === 'offset' ? t('common:time.second') : t('common:time.minute')}
+                                {type === 'pct_target_miss' ? t('host.trigger.pct_target_miss_text') : type === 'offset' ? t('host.trigger.millisecond') : t('host.trigger.second')}
                               </span>
                               {type === 'pct_target_miss' && (
                                 <>

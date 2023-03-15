@@ -84,6 +84,7 @@ const en_US = {
     base: {
       title: 'Panel options',
       name: 'Title',
+      name_tip: 'The table type panel must set the title',
       link: {
         label: 'Links',
         btn: 'Add',
@@ -244,6 +245,9 @@ const en_US = {
       time_tip: 'Default is the global time range of the dashboard',
       step_tip: 'Default is the global step of the dashboard',
     },
+  },
+  detail: {
+    datasource_empty: 'Please configure the data source first',
   },
 };
 export default en_US;

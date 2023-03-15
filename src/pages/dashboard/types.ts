@@ -83,11 +83,7 @@ export interface IOptions {
     displayMode: 'list' | 'table' | 'hidden';
     placement: 'right' | 'bottom';
     disabled: boolean;
-    min: boolean;
-    max: boolean;
-    avg: boolean;
-    last: boolean;
-    sum: boolean;
+    columns?:[]
     detail: string;
   };
   tooltip?: {

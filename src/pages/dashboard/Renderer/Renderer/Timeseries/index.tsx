@@ -33,10 +33,20 @@ import { renderUrl } from '../../../utils'
 import { ColumnProps } from 'antd/lib/table';
 import { useTranslation } from 'react-i18next';
 
+interface ColData {
+    value: number
+    unit?: string
+    text: string
+}
+
 interface DataItem {
     id: string;
     name: string;
-    columns: [];
+    min: ColData;
+    max: ColData;
+    avg: ColData;
+    last: ColData;
+    sum: ColData;
     disabled: boolean;
     detail: string;
 }
@@ -82,7 +92,8 @@ export default function index(props: IProps) {
   const legendEleSize = useSize(legendEleRef);
   const displayMode = options.legend?.displayMode || 'table';
   const placement = options.legend?.placement || 'bottom';
-  const legendColumns = options.legend?.columns || ['max', 'min', 'avg', 'sum', 'last']
+  // 空的话， 就是展示全部
+  const legendColumns = options.legend?.columns && options.legend?.columns.length > 0 ? options.legend?.columns : ['max', 'min', 'avg', 'sum', 'last']
   const detail = options.legend?.detail || undefined
   const hasLegend = displayMode !== 'hidden';
   const [legendData, setLegendData] = useState<any[]>([]);
@@ -255,7 +266,7 @@ export default function index(props: IProps) {
     }
   }, [placement]);
 
-  let tableColum:ColumnProps<DataItem>[] = [
+  let tableColumn:ColumnProps<DataItem>[] = [
       {
           title: `Series (${series.length})`,
           dataIndex: 'name',
@@ -289,7 +300,7 @@ export default function index(props: IProps) {
               },
       }]
       legendColumns.forEach(column => {
-        tableColum = [...tableColum,
+        tableColumn = [...tableColumn,
                       {
                           title: t(`panel.options.legend.${column}`),
                           dataIndex: column,
@@ -302,7 +313,7 @@ export default function index(props: IProps) {
      })
     // 是否添加详情
     if (detail) {
-        tableColum = [...tableColum,
+        tableColumn = [...tableColumn,
                       {
                           title: '详情',
                           dataIndex: 'detail',
@@ -339,7 +350,7 @@ export default function index(props: IProps) {
                 size='small'
                 className='scroll-container-table'
                 scroll={{ x: 650 }}
-                columns={tableColum}
+                columns={tableColumn}
                 dataSource={legendData}
                 locale={{
                   emptyText: '暂无数据',

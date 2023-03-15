@@ -107,7 +107,7 @@ const zh_CN = {
         avg: '平均',
         sum: '汇总',
         last: '当前',
-        columns: '字段',
+        columns: '显示列',
       },
       thresholds: {
         title: '阈值',

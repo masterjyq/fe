@@ -25,6 +25,7 @@ import BarGauge from './BarGauge';
 import Text from './Text';
 import Gauge from './Gauge';
 import Link from './Link';
+import Iframe from './Iframe';
 
 export default function index({ type, targets, chartForm, variableConfigWithOptions }) {
   const OptionsCptMap = {
@@ -35,6 +36,7 @@ export default function index({ type, targets, chartForm, variableConfigWithOpti
     hexbin: <Hexbin />,
     barGauge: <BarGauge />,
     text: <Text variableConfigWithOptions={variableConfigWithOptions} />,
+    iframe: <Iframe variableConfigWithOptions={variableConfigWithOptions} />,
     gauge: <Gauge />,
     link: <Link variableConfigWithOptions={variableConfigWithOptions}/>,
 

@@ -20,7 +20,7 @@ import classNames from 'classnames';
 import { useInViewport } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { Dropdown, Menu, Tooltip, Space } from 'antd';
-import { InfoCircleOutlined, MoreOutlined, LinkOutlined, SettingOutlined, ShareAltOutlined, DeleteOutlined, CopyOutlined, SyncOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, MoreOutlined, LinkOutlined, SettingOutlined, ShareAltOutlined, DeleteOutlined, CopyOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { IRawTimeRange } from '@/components/TimeRangePicker';
 import Timeseries from './Timeseries';
 import Stat from './Stat';
@@ -31,6 +31,7 @@ import BarGauge from './BarGauge';
 import Text from './Text';
 import Gauge from './Gauge';
 import Link from './Link';
+import Iframe from './Iframe';
 import { IVariable } from '../../VariableConfig/definition';
 import { replaceExpressionVars } from '../../VariableConfig/constant';
 import Markdown from '../../Editor/Components/Markdown';
@@ -71,7 +72,7 @@ function index(props: IProps) {
   const ref = useRef<HTMLDivElement>(null);
   const bodyWrapRef = useRef<HTMLDivElement>(null);
   const [inViewPort] = useInViewport(ref);
-  const { series, loading } = useQuery({
+  const { series, error, loading } = useQuery({
     id,
     dashboardId,
     time,
@@ -85,7 +86,7 @@ function index(props: IProps) {
   });
   const name = replaceFieldWithVariable(dashboardId, values.name, variableConfig);
   const description = replaceFieldWithVariable(dashboardId, values.description, variableConfig);
-  const tipsVisible = description || !_.isEmpty(values.links);
+  const tipsVisible = !error && (description || !_.isEmpty(values.links));
 
   useEffect(() => {
     setTime(props.time);
@@ -111,6 +112,7 @@ function index(props: IProps) {
     text: () => <Text {...subProps} />,
     gauge: () => <Gauge {...subProps} themeMode={themeMode} />,
     link: () => <Link {...subProps} time={time} cluster={datasourceValue} themeMode={themeMode}/>
+    iframe: () => <Iframe {...subProps} />,
   };
 
   return (
@@ -148,6 +150,20 @@ function index(props: IProps) {
               <div className='renderer-header-desc'>{description ? <InfoCircleOutlined /> : <LinkOutlined />}</div>
             </Tooltip>
           ) : null}
+          {error && (
+            <Tooltip
+              title={error}
+              placement='leftTop'
+              overlayInnerStyle={{
+                maxWidth: 300,
+              }}
+              getPopupContainer={() => ref.current!}
+            >
+              <div className='renderer-header-error'>
+                <InfoCircleOutlined style={{ color: 'red' }} />
+              </div>
+            </Tooltip>
+          )}
           <div className='renderer-header-content'>
             <Tooltip title={name} getPopupContainer={() => ref.current!}>
               <div className='renderer-header-title'>{name}</div>
@@ -237,8 +253,8 @@ function index(props: IProps) {
             )}
           </div>
         </div>
-        <div className='renderer-body' style={{ height: values.name ? `calc(100% - 47px)` : '100%' }}>
-          {_.isEmpty(series) && values.type !== 'text'  && values.type !== 'link' ? (
+        <div className='renderer-body' style={{ height: values.name ? `calc(100% - 34px)` : '100%' }}>
+          {_.isEmpty(series) && values.type !== 'text' && values.type !== 'iframe' && values.type !== 'iframe' ? (
             <div className='renderer-body-content-empty'>No Data</div>
           ) : (
             <>{RendererCptMap[values.type] ? RendererCptMap[values.type]() : <div className='unknown-type'>{`无效的图表类型 ${values.type}`}</div>}</>

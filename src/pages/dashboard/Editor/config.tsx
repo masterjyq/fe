@@ -54,6 +54,10 @@ export const visualizations = [
       type: 'link',
       name: '链接',
   },
+  {
+    type: 'iframe',
+    name: '内嵌文档(iframe)',
+  },
 ];
 
 export const IRefreshMap = {
@@ -186,7 +190,7 @@ export const defaultCustomValuesMap = {
   },
   barGauge: {
     calc: 'lastNotNull',
-    baseColor: '#FF656B',
+    baseColor: '#9470FF',
     displayMode: 'basic',
     serieWidth: 20,
     sortOrder: 'desc',

@@ -26,7 +26,7 @@ const getDefaultStepByStartAndEnd = (start: number, end: number) => {
 
 export default async function prometheusQuery(options: IOptions) {
   const { dashboardId, id, time, step, targets, variableConfig, spanNulls } = options;
-  if (!time.start) return;
+  if (!time.start) return Promise.resolve([]);
   const parsedRange = parseRange(time);
   let start = moment(parsedRange.start).unix();
   let end = moment(parsedRange.end).unix();
@@ -37,17 +37,17 @@ export default async function prometheusQuery(options: IOptions) {
   let exprs: string[] = [];
   let refIds: string[] = [];
   let signalKey = `${id}`;
-  const datasourceValue = variableConfig ? replaceExpressionVars(options.datasourceValue as any, variableConfig, variableConfig.length, dashboardId) : undefined;
+  const datasourceValue = variableConfig ? replaceExpressionVars(options.datasourceValue as any, variableConfig, variableConfig.length, dashboardId) : options.datasourceValue;
   if (targets && typeof datasourceValue === 'number') {
     _.forEach(targets, (target) => {
       if (target.time) {
         const parsedRange = parseRange(target.time);
         start = moment(parsedRange.start).unix();
         end = moment(parsedRange.end).unix();
-        _step = getDefaultStepByStartAndEnd(start, end);
-        if (target.step) {
-          _step = target.step;
-        }
+        if (!step) _step = getDefaultStepByStartAndEnd(start, end);
+      }
+      if (target.step) {
+        _step = target.step;
       }
 
       start = start - (start % _step!);
@@ -66,26 +66,32 @@ export default async function prometheusQuery(options: IOptions) {
         signalKey += `-${target.expr}`;
       }
     });
-    const res = await fetchHistoryBatch({ queries: batchParams, datasource_id: datasourceValue }, signalKey);
-    const dat = res.dat || [];
-    for (let i = 0; i < dat?.length; i++) {
-      var item = {
-        result: dat[i],
-        expr: exprs[i],
-        refId: refIds[i],
-      };
-      const target = _.find(targets, (t) => t.expr === item.expr);
-      _.forEach(item.result, (serie) => {
-        series.push({
-          id: _.uniqueId('series_'),
-          refId: item.refId,
-          name: target?.legend ? replaceExpressionBracket(target?.legend, serie.metric) : getSerieName(serie.metric),
-          metric: serie.metric,
-          expr: item.expr,
-          data: !spanNulls ? completeBreakpoints(_step, serie.values) : serie.values,
+    try {
+      const res = await fetchHistoryBatch({ queries: batchParams, datasource_id: datasourceValue }, signalKey);
+      const dat = res.dat || [];
+      for (let i = 0; i < dat?.length; i++) {
+        var item = {
+          result: dat[i],
+          expr: exprs[i],
+          refId: refIds[i],
+        };
+        const target = _.find(targets, (t) => t.expr === item.expr);
+        _.forEach(item.result, (serie) => {
+          series.push({
+            id: _.uniqueId('series_'),
+            refId: item.refId,
+            name: target?.legend ? replaceExpressionBracket(target?.legend, serie.metric) : getSerieName(serie.metric),
+            metric: serie.metric,
+            expr: item.expr,
+            data: !spanNulls ? completeBreakpoints(_step, serie.values) : serie.values,
+          });
         });
-      });
+      }
+      return Promise.resolve(series);
+    } catch (e) {
+      console.error(e);
+      return Promise.reject(e);
     }
   }
-  return series;
+  return Promise.resolve([]);
 }

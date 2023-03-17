@@ -38,7 +38,7 @@ import Editor from '../Editor';
 import { defaultCustomValuesMap, defaultOptionsValuesMap } from '../Editor/config';
 import { sortPanelsByGridLayout, panelsMergeToConfigs, updatePanelsInsertNewPanelToGlobal } from '../Panels/utils';
 import { useGlobalState } from '../globalState';
-import { getLocalDatasourceValue, getDatasourceValue } from './utils';
+import { getLocalDatasourceValue, getDatasourceValue, getLocalStep, setLocalStep } from './utils';
 import './style.less';
 import './dark.antd.less';
 import './dark.less';
@@ -58,7 +58,7 @@ const fetchDashboard = ({ id, builtinParams }) => {
 export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boolean; gobackPath?: string; builtinParams?: any }) {
   const { isPreview = false, isBuiltin = false, gobackPath, builtinParams } = props;
   const { t, i18n } = useTranslation('dashboard');
-  const { groupedDatasourceList } = useContext(CommonStateContext);
+  const { groupedDatasourceList, datasourceList } = useContext(CommonStateContext);
   const datasources = groupedDatasourceList.prometheus || [];
   const [dashboardMeta, setDashboardMeta] = useGlobalState('dashboardMeta');
   const { search } = useLocation();
@@ -76,7 +76,7 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
       end: 'now',
     }),
   );
-  const [step, setStep] = useState<number | null>(null);
+  const [step, setStep] = useState<number | null>(getLocalStep(id));
   const [editable, setEditable] = useState(true);
   const [editorData, setEditorData] = useState({
     visible: false,
@@ -195,7 +195,10 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
             setRange(v);
           }}
           step={step}
-          setStep={setStep}
+          setStep={(val) => {
+            setStep(val);
+            setLocalStep(id, val);
+          }}
           onAddPanel={(type) => {
             if (type === 'row') {
               const newPanels = updatePanelsInsertNewPanelToGlobal(
@@ -234,7 +237,7 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
         />
       }
     >
-      <div>
+      <div className='dashboard-detail-container'>
         <div className='dashboard-detail-content'>
           {!editable && (
             <div style={{ padding: '5px 10px' }}>
@@ -271,6 +274,7 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
           </div>
           {variableConfigWithOptions && (
             <Panels
+              id={id}
               isPreview={isPreview}
               key={forceRenderKey}
               editable={editable}
@@ -282,9 +286,15 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
               step={step}
               variableConfig={variableConfigWithOptions}
               onShareClick={(panel) => {
+                const curDatasourceValue = panel.datasourceValue
+                  ? replaceExpressionVars(panel.datasourceValue, variableConfigWithOptions, variableConfigWithOptions.length, id)
+                  : datasourceValue;
                 const serielData = {
                   dataProps: {
                     ...panel,
+                    datasourceValue: curDatasourceValue,
+                    // @ts-ignore
+                    datasourceName: _.find(datasourceList, { id: curDatasourceValue })?.name,
                     targets: _.map(panel.targets, (target) => {
                       const realExpr = variableConfigWithOptions
                         ? replaceExpressionVars(target.expr, variableConfigWithOptions, variableConfigWithOptions.length, id)
@@ -297,7 +307,6 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
                     step,
                     range,
                   },
-                  curCluster: localStorage.getItem('curCluster'),
                 };
                 SetTmpChartData([
                   {

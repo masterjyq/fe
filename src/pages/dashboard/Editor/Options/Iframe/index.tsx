@@ -15,31 +15,12 @@
  *
  */
 import React from 'react';
-import { Tabs } from 'antd';
-import { RetweetOutlined } from '@ant-design/icons';
-import PageLayout from '@/components/pageLayout';
-import Dashboard from './Dashboard';
+import GraphStyles from './GraphStyles';
 
-const { TabPane } = Tabs;
-
-export default function Migrate() {
+export default function Timeseries({ variableConfigWithOptions }) {
   return (
-    <PageLayout
-      title={
-        <>
-          <RetweetOutlined /> 管理员迁移
-        </>
-      }
-    >
-      <div>
-        <div style={{ padding: 20 }}>
-          <Tabs defaultActiveKey='boards'>
-            <TabPane tab='大盘迁移' key='boards'>
-              <Dashboard />
-            </TabPane>
-          </Tabs>
-        </div>
-      </div>
-    </PageLayout>
+    <>
+      <GraphStyles variableConfigWithOptions={variableConfigWithOptions} />
+    </>
   );
 }

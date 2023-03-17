@@ -90,7 +90,7 @@ function FormCpt(props, ref) {
               {({ getFieldValue }) => {
                 const type = getFieldValue('type');
                 // 超链接也不需要
-                if (type !== 'text' && type !== 'link') {
+                if (type !== 'text' && type !== 'link'&& type !== 'iframe') {
                   return (
                     <div style={{ height: 'calc(100% - 310px)', overflowY: 'auto' }}>
                       <div style={{ marginBottom: 10 }}>
@@ -169,6 +169,7 @@ function FormCpt(props, ref) {
                                   rules={[
                                     {
                                       required: true,
+                                      message: t('panel.base.link.name_msg'),
                                     },
                                   ]}
                                 >
@@ -188,6 +189,7 @@ function FormCpt(props, ref) {
                                   rules={[
                                     {
                                       required: true,
+                                      message: t('panel.base.link.url_msg'),
                                     },
                                   ]}
                                 >

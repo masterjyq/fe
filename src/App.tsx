@@ -75,12 +75,7 @@ export interface ICommonState {
 }
 
 // 可以匿名访问的路由 TODO: job-task output 应该也可以匿名访问
-const anonymousRoutes = [
-  '/login',
-  '/callback',
-  // '/chart', // TODO: 分享的页面是需要获取数据源列表的
-  '/dashboards/share/',
-];
+const anonymousRoutes = ['/login', '/callback', '/chart', '/dashboards/share/'];
 // 判断是否是匿名访问的路由
 const anonymous = _.some(anonymousRoutes, (route) => location.pathname.startsWith(route));
 // 初始化数据 context
@@ -132,18 +127,19 @@ function App() {
               curBusiId: defaultBusiId,
             };
           });
-          if (_.isEmpty(datasourceList) && !_.startsWith(location.pathname, '/help/source')) {
-            Modal.warning({
-              title: t('common:datasource.empty_modal.title'),
-              okText: _.includes(profile.roles, 'Admin') ? t('common:datasource.empty_modal.btn1') : t('common:datasource.empty_modal.btn2'),
-              onOk: () => {
-                if (_.includes(profile.roles, 'Admin')) {
-                  history.pushState(null, '', '/help/source');
-                  window.location.reload();
-                }
-              },
-            });
-          }
+          // TODO: 暂时关闭数据源为空的提示，后面再优化下
+          // if (_.isEmpty(datasourceList) && !_.startsWith(location.pathname, '/help/source')) {
+          //   Modal.warning({
+          //     title: t('common:datasource.empty_modal.title'),
+          //     okText: _.includes(profile.roles, 'Admin') ? t('common:datasource.empty_modal.btn1') : t('common:datasource.empty_modal.btn2'),
+          //     onOk: () => {
+          //       if (_.includes(profile.roles, 'Admin')) {
+          //         history.pushState(null, '', '/help/source');
+          //         window.location.reload();
+          //       }
+          //     },
+          //   });
+          // }
         }
       })();
     } catch (error) {

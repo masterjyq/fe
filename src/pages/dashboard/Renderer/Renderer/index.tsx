@@ -112,7 +112,7 @@ function index(props: IProps) {
     text: () => <Text {...subProps} />,
     gauge: () => <Gauge {...subProps} themeMode={themeMode} />,
     link: () => <Link {...subProps} time={time} cluster={datasourceValue} themeMode={themeMode}/>
-    iframe: () => <Iframe {...subProps} />,
+    iframe: () => <Iframe {...subProps} time={time} />,
   };
 
   return (
@@ -254,7 +254,7 @@ function index(props: IProps) {
           </div>
         </div>
         <div className='renderer-body' style={{ height: values.name ? `calc(100% - 34px)` : '100%' }}>
-          {_.isEmpty(series) && values.type !== 'text' && values.type !== 'iframe' && values.type !== 'iframe' ? (
+          {_.isEmpty(series) && values.type !== 'text' && values.type !== 'link' && values.type !== 'iframe' ? (
             <div className='renderer-body-content-empty'>No Data</div>
           ) : (
             <>{RendererCptMap[values.type] ? RendererCptMap[values.type]() : <div className='unknown-type'>{`无效的图表类型 ${values.type}`}</div>}</>

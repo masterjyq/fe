@@ -127,6 +127,11 @@ function Card(props: Props, ref) {
       },
     },
     {
+      title: t('trigger_value'),
+      dataIndex: 'trigger_value',
+      width: 80,
+    },
+    {
       title: t('trigger_time'),
       dataIndex: 'trigger_time',
       width: 120,

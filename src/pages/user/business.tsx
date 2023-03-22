@@ -40,7 +40,7 @@ const Resource: React.FC = () => {
   const [action, setAction] = useState<ActionType>();
   const [teamId, setTeamId] = useState<string>(id || '');
   const [memberList, setMemberList] = useState<{ user_group: any }[]>([]);
-  const [teamInfo, setTeamInfo] = useState<{ name: string; id: number }>();
+  const [teamInfo, setTeamInfo] = useState<{ name: string; id: number, note: string }>();
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [memberLoading, setMemberLoading] = useState<boolean>(false);
   const [searchMemberValue, setSearchMemberValue] = useState<string>('');
@@ -241,7 +241,7 @@ const Resource: React.FC = () => {
                     color: '#666',
                   }}
                 >
-                  {t('common:table.note')}：{t('business.note_content')}
+                  {t('common:table.note')}：{teamInfo && teamInfo.note}
                 </Col>
               </Row>
               <Row justify='space-between' align='middle'>

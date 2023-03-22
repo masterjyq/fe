@@ -111,8 +111,8 @@ function index(props: IProps) {
     barGauge: () => <BarGauge {...subProps} themeMode={themeMode} />,
     text: () => <Text {...subProps} />,
     gauge: () => <Gauge {...subProps} themeMode={themeMode} />,
-    link: () => <Link {...subProps} time={time} cluster={datasourceValue} themeMode={themeMode}/>
-    iframe: () => <Iframe {...subProps} time={time} />,
+    link: () => <Link {...subProps} time={time} cluster={datasourceValue} themeMode={themeMode}/>,
+    iframe: () => <Iframe {...subProps} time={time} />
   };
 
   return (

@@ -76,6 +76,7 @@ export const defaultValues = {
   prod: 'host',
   cate: 'host',
   enable_status: true,
+  enable_in_bg: true,
 };
 
 export const ruleTypeOptions = [

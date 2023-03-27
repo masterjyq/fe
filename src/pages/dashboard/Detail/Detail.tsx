@@ -98,7 +98,7 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
         configs,
       });
       if (!datasourceValue) {
-        const dashboardConfigs: any = res.configs;
+        const dashboardConfigs: any = configs;
         const localDatasourceValue = getLocalDatasourceValue(search, groupedDatasourceList);
         setDatasourceValue(getDatasourceValue(dashboardConfigs, curDatasources) || localDatasourceValue || curDatasources[0]?.id);
       }
@@ -138,7 +138,7 @@ export default function DetailV2(props: { isPreview?: boolean; isBuiltin?: boole
     if (valueWithOptions) {
       setVariableConfigWithOptions(valueWithOptions);
       setDashboardMeta({
-        dashboardId: _.toString(dashboard.id),
+        dashboardId: _.toString(id),
         variableConfigWithOptions: valueWithOptions,
       });
     }

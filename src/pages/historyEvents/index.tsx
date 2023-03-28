@@ -216,9 +216,10 @@ const Event: React.FC = () => {
               });
             }}
           >
-            <Select.Option value={1}>S1</Select.Option>
-            <Select.Option value={2}>S2</Select.Option>
-            <Select.Option value={3}>S3</Select.Option>
+            <Select.Option value={1}>紧急</Select.Option>
+            <Select.Option value={2}>重要</Select.Option>
+            <Select.Option value={3}>次要</Select.Option>
+            <Select.Option value={4}>提示</Select.Option>
           </Select>
           <Select
             style={{ minWidth: 60 }}

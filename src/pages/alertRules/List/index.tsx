@@ -28,7 +28,7 @@ import SearchInput from '@/components/BaseSearchInput';
 import usePagination from '@/components/usePagination';
 import { getStrategyGroupSubList, updateAlertRules, deleteStrategy } from '@/services/warning';
 import { CommonStateContext } from '@/App';
-import { priorityColor } from '@/utils/constant';
+import { priorityColor,severityArray } from '@/utils/constant';
 import { AlertRuleType, AlertRuleStatus } from '../types';
 import MoreOperations from './MoreOperations';
 import { ruleTypeOptions } from '../Form/constants';
@@ -95,7 +95,7 @@ export default function List(props: ListProps) {
         return _.map(data, (severity) => {
           return (
             <Tag key={severity} color={priorityColor[severity - 1]}>
-              S{severity}
+              {severityArray[severity - 1]}
             </Tag>
           );
         });

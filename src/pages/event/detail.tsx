@@ -239,17 +239,17 @@ const EventDetailPage: React.FC = () => {
           : '';
       },
     },
-    {
-      label: t('detail.runbook_url'),
-      key: 'runbook_url',
-      render(url) {
-        return (
-          <a href={url} target='_balank'>
-            {url}
-          </a>
-        );
-      },
-    },
+    // {
+    //   label: t('detail.runbook_url'),
+    //   key: 'runbook_url',
+    //   render(url) {
+    //     return (
+    //       <a href={url} target='_balank'>
+    //         {url}
+    //       </a>
+    //     );
+    //   },
+    // },
   ];
 
   if (eventDetail?.annotations) {
@@ -258,7 +258,7 @@ const EventDetailPage: React.FC = () => {
         label: key,
         key,
         render: () => {
-          if (value.indexOf('http') === 0) {
+          if (value.indexOf('http') === 0 || value.indexOf('/') === 0) {
             return (
               <a href={value} target='_blank'>
                 {value}

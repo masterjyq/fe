@@ -46,7 +46,6 @@ interface IProps {
   dashboardId: string;
   id?: string;
   time: IRawTimeRange;
-  step: number | null;
   values: IPanel;
   variableConfig?: IVariable[];
   isPreview?: boolean; // 是否是预览，预览中不显示编辑和分享
@@ -65,7 +64,7 @@ function replaceFieldWithVariable(dashboardId, value: string, variableConfig?: I
 
 function index(props: IProps) {
   const { t } = useTranslation('dashboard');
-  const { datasourceValue, themeMode, dashboardId, id, step, variableConfig, isPreview, onCloneClick, onShareClick, onEditClick, onDeleteClick } = props;
+  const { datasourceValue, themeMode, dashboardId, id, variableConfig, isPreview, onCloneClick, onShareClick, onEditClick, onDeleteClick } = props;
   const [time, setTime] = useState(props.time);
   const [visible, setVisible] = useState(false);
   const values = _.cloneDeep(props.values);
@@ -76,7 +75,6 @@ function index(props: IProps) {
     id,
     dashboardId,
     time,
-    step,
     targets: values.targets,
     variableConfig,
     inViewPort: isPreview || inViewPort,
@@ -197,7 +195,7 @@ function index(props: IProps) {
                         }}
                         key='0'
                       >
-                        <Tooltip title={t('refresh_tip', { num: getStepByTimeAndStep(time, step) })} placement='left'>
+                        <Tooltip title={<div>{/* {t('refresh_tip', { num: getStepByTimeAndStep(time, step) })} */}</div>} placement='left'>
                           <div>
                             <SyncOutlined style={{ marginRight: 8 }} />
                             {t('refresh_btn')}

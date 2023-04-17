@@ -27,11 +27,12 @@ import { IVariable } from './definition';
 import { convertExpressionToQuery, replaceExpressionVars, filterOptionsByReg, setVaraiableSelected } from './constant';
 
 interface IProps {
-  datasourceValue: number;
   id: string;
   range: IRawTimeRange;
   index: number;
   data: IVariable;
+  vars: IVariable[];
+  datasourceVars: IVariable[];
   onOk: (val: IVariable) => void;
   onCancel: () => void;
 }
@@ -72,7 +73,7 @@ const allOptions = [
 
 function EditItem(props: IProps) {
   const { t } = useTranslation('dashboard');
-  const { datasourceValue, data, range, id, index, onOk, onCancel } = props;
+  const { data, vars, range, id, index, datasourceVars, onOk, onCancel } = props;
   const [form] = Form.useForm();
   const { groupedDatasourceList } = useContext(CommonStateContext);
   // TODO: 不太清楚这里的逻辑是干嘛的，后面找时间看下
@@ -82,7 +83,7 @@ function EditItem(props: IProps) {
     if ((!reg || new RegExp('^/(.*?)/(g?i?m?y?)$').test(reg)) && expression && data) {
       const formData = form.getFieldsValue();
       var newExpression = replaceExpressionVars(expression, formData, index, id);
-      convertExpressionToQuery(newExpression, range, data, datasourceValue).then((res) => {
+      convertExpressionToQuery(newExpression, range, data).then((res) => {
         const regFilterRes = filterOptionsByReg(res, reg, formData, index, id);
         if (regFilterRes.length > 0) {
           setVaraiableSelected({ name: formData.var[index].name, value: regFilterRes[0], id });
@@ -153,14 +154,15 @@ function EditItem(props: IProps) {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <ClusterSelect cate={datasourceCate} label={t('common:datasource.id')} name={['datasource', 'value']} defaultDatasourceValue={datasourceValue} />
+                        <ClusterSelect cate={datasourceCate} label={t('common:datasource.id')} name={['datasource', 'value']} datasourceVars={datasourceVars} />
                       </Col>
                       {datasourceCate === 'elasticsearch' && (
                         <>
                           <Col span={8}>
                             <Form.Item shouldUpdate={(prevValues, curValues) => prevValues?.datasource?.value !== curValues?.datasource?.value} noStyle>
                               {({ getFieldValue }) => {
-                                const datasourceValue = getFieldValue(['datasource', 'value']);
+                                let datasourceValue = getFieldValue(['datasource', 'value']);
+                                datasourceValue = replaceExpressionVars(datasourceValue as any, vars, vars.length, id);
                                 return <IndexSelect name={['config', 'index']} cate={datasourceCate} datasourceValue={datasourceValue} />;
                               }}
                             </Form.Item>

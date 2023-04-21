@@ -111,7 +111,11 @@ function index(props: IProps) {
               setVaraiableSelected({ name: item.name, value: item.definition, id, urlAttach: true });
             }
           } else if (item.type === 'datasource') {
-            const options = item.definition ? (groupedDatasourceList[item.definition] as any) : [];
+            let options = item.definition ? (groupedDatasourceList[item.definition] as any) : [];
+            // 添加全部
+            if(options){
+              options = [...options,{name:"全部",id: -1}]
+            }
             result[idx] = item;
             result[idx].options = options;
             const selected = getVaraiableSelected(item.name, item.type, id);
